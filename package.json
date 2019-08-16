@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/todayisyesterday/otherboard/issues"
   },
-  "homepage": "https://github.com/todayisyesterday/otherboard#readme"
+  "homepage": "https://github.com/todayisyesterday/otherboard#readme",
+  "dependencies": {
+    "discord.js": "^11.5.1"
+  }
 }
