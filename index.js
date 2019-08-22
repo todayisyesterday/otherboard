@@ -15,22 +15,42 @@ bot.on("message", async message => {
   let args = content.slice(1);
   let prefix = config.prefix;
   if(message.channel.name==="testing"){
-    let bestArr=[],messageArr=[],messages1;
-    let messages=message.channel.fetchMessages()
+    let messageArr=[],messages1=[];
+    let messages=message.channel.fetchMessages({limit:100})
     .then(m => {
       //console.log(messages.filter(m=>m.channel.name==="testing"));
-      return m.filter(m=>m.channel.name==="testing");
+      messages1=m.filter(m=>m.channel.name==="testing").array();
+      return true;
     })
     .catch(console.error);
     await messages;
-    console.log(messages);
-    try {
-      messages1=messages.array();
-      messageArr=messages1.map(Message => { Message.id, Message.channel.id, Message.reactions });
-    } catch(e){
-      console.error;
-    }
+    messageArr=messages1.map(Message => {
+      let mapObj={};
+      mapObj["id"]=Message.id;
+      mapObj["ida"]=Message.author.id;
+      mapObj["rea"]=Message.reactions;
+      return mapObj;
+    });
+    messageArr.forEach(e => {
+      let reac=e.rea;
+      let reacm=reac.find(e => e.message);
+      if(reacm){
+        let reacem=reacm._emoji.name;
+        if(reacem==="⭐"){
+          e.rea=reacm.count;
+        } else {
+          e.rea=0
+        }
+      } else {
+        e.rea=0;
+      };
+    });
+    messageArr.sort((a,b) => {
+      return a.rea-b.rea;
+    });
     console.log(messageArr);
+    let reaEmbed = new Discord.RichEmbed()
+    .setDescription("Best last STARRED 100 messages");
   };
 })
 
